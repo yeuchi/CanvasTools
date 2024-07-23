@@ -1,7 +1,6 @@
 package com.yeuchi.canvasTools
 
 import android.graphics.PointF
-import android.provider.SyncStateContract.Helpers.insert
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yeuchi.canvaslines.curves.CubicSpline
@@ -17,7 +16,13 @@ import javax.inject.Inject
 open class MainViewModel @Inject constructor() : ViewModel() {
 
     private val _event = MutableSharedFlow<MainViewEvent>()
-    val event: SharedFlow<MainViewEvent> = _event
+   val event: SharedFlow<MainViewEvent> = _event
+
+// Migrate to Kotlin 2.0 https://kotlinlang.org/docs/k2-compiler-migration-guide.html#support-in-ides
+// got everything to compile and run but the app does not work correctly. IDE is not ready
+//   val event: SharedFlow<MainViewEvent>
+//       field = MutableSharedFlow<MainViewEvent>()
+
 
     val cubicSpline = CubicSpline()
 

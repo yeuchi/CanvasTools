@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+//    alias(libs.plugins.compose.compiler)
     id ("dagger.hilt.android.plugin")
     id ("kotlin-kapt")
 }
@@ -55,6 +56,19 @@ android {
         dataBinding = true
     }
 }
+
+//https://youtrack.jetbrains.com/issue/KT-68400/K2-w-Kapt-currently-doesnt-support-language-version-2.0.-Falling-back-to-1.9.
+//composeCompiler {
+//    enableStrongSkippingMode = true
+//    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+//}
+
+//https://stackoverflow.com/questions/78529749/explicit-backing-field-not-working-in-latest-kotlin-2-0-0-android/78584290#78584290
+//kotlin {
+//    sourceSets.all {
+//        languageSettings.enableLanguageFeature("ExplicitBackingFields")
+//    }
+//}
 
 dependencies {
 
