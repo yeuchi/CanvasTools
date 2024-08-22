@@ -74,6 +74,7 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:2.44")
     implementation(project(":canvasLines"))
+    implementation(libs.androidx.material3.android)
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
     implementation ("com.google.android.material:material:1.3.0-alpha02")
