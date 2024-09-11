@@ -1,6 +1,8 @@
 package com.yeuchi.canvasTools
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -23,11 +25,16 @@ class MainActivityTest {
 
     @Test
     fun is_radio_button_line_Visible_test() {
-        composeTestRule.onNodeWithText("line").assertExists()
+        composeTestRule.onNodeWithText("line").assertIsDisplayed()
     }
 
     @Test
     fun is_radio_button_cubic_spline_Visible_test() {
-        composeTestRule.onNodeWithText("cubic_spline").assertExists()
+        composeTestRule.onNodeWithText("cubic_spline").assertIsDisplayed()
+    }
+
+    @Test
+    fun is_fab_delete_Visible_test() {
+        composeTestRule.onNodeWithTag("fab_delete").assertIsDisplayed()
     }
 }
