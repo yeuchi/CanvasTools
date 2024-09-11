@@ -17,7 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.yeuchi.canvasTools.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -72,7 +72,15 @@ android {
 
 dependencies {
 
-    implementation("com.google.dagger:hilt-android:2.44")
+    /* HILT */
+    implementation ("com.google.dagger:hilt-android:2.44")
+    kapt ("com.google.dagger:hilt-android-compiler:2.44")
+    kaptAndroidTest ("com.google.dagger:hilt-android-compiler:2.44")
+//    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_version"
+//    kapt "androidx.hilt:hilt-compiler:$hilt_version"
+    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.44")
+    /* ends HILT */
+
     implementation(project(":canvasLines"))
     //implementation(libs.androidx.material3.android)
     kapt("com.google.dagger:hilt-android-compiler:2.44")
