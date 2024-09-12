@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 
@@ -83,7 +84,8 @@ fun ComposeCanvas(viewModel: MainViewModel) {
                         selected = (text == selectedOption.value),
                         onClick = {
                             selectedOption.value = text
-                        }
+                        },
+                        Modifier.testTag("btn_$text")
                     )
                     Text(
                         text = text,
