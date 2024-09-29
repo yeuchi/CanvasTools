@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ComposeCanvas(viewModel: MainViewModel) {
     viewModel.apply {
-        val radioOptions = listOf("line", "cubic_spline")
+        val radioOptions = listOf("line", "bezier", "cubic_spline")
         val selectedOption = remember { mutableStateOf(radioOptions[0]) }
 
         Box(modifier = Modifier
@@ -58,11 +58,7 @@ fun ComposeCanvas(viewModel: MainViewModel) {
             if (points.size > 1) {
                 Path().let { path ->
                     path.moveTo(points[0].x, points[0].y)
-
-                    when (selectedOption.value) {
-                        "line" -> drawPath(knots, path, this)
-                        "cubic_spline" -> drawPath(points, path, this)
-                    }
+                    drawPath(points, path, this)
                 }
             }
         }
@@ -75,6 +71,7 @@ fun ComposeCanvas(viewModel: MainViewModel) {
                             selected = (text == selectedOption.value),
                             onClick = {
                                 selectedOption.value = text
+                                chooseContourType(text, viewModel)
                             }
                         )
                         .padding(horizontal = 16.dp),
@@ -84,6 +81,7 @@ fun ComposeCanvas(viewModel: MainViewModel) {
                         selected = (text == selectedOption.value),
                         onClick = {
                             selectedOption.value = text
+                            chooseContourType(text, viewModel)
                         },
                         Modifier.testTag("btn_$text")
                     )
@@ -95,6 +93,16 @@ fun ComposeCanvas(viewModel: MainViewModel) {
             }
         }
     }
+}
+
+private fun chooseContourType(text:String, viewModel: MainViewModel) {
+    val type = when (text) {
+        "bezier" -> ContourType.BEZIER_QUAD
+        "cubic_spline" -> ContourType.CUBIC_SPLINE
+//                                   "line"
+        else -> ContourType.DEFAULT_LINE
+    }
+    viewModel.setContourType(type)
 }
 
 fun drawPath(points: List<PointF>, path: Path, drawScope: DrawScope) {

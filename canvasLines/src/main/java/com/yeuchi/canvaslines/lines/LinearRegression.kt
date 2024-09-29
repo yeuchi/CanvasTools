@@ -1,12 +1,13 @@
 package com.yeuchi.canvaslines.lines
 
 import android.graphics.PointF
+import com.yeuchi.canvaslines.ContourKnots
 
 /**
  * Discrete Least Squares Approximation
  * Numerical Analysis 5th edition by Burden Chapter 8.1 Page 436-442
  */
-class LinearRegression {
+class LinearRegression: ContourKnots() {
 
     fun findLeastSquare(points: List<PointF>,
                              startX: Float,

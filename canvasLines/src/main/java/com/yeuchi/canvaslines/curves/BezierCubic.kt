@@ -1,4 +1,6 @@
 package com.yeuchi.canvaslines.curves
 
-class BezierCubic {
+import com.yeuchi.canvaslines.ContourKnots
+
+class BezierCubic: ContourKnots() {
 }

@@ -1,6 +1,7 @@
 package com.yeuchi.canvaslines.curves
 
 import android.graphics.PointF
+import com.yeuchi.canvaslines.ContourKnots
 
 // ============================================================================
 // Module:		CubicSpline.js
@@ -27,7 +28,7 @@ import android.graphics.PointF
 // 20Nov11		ported it to javascript, working in HTML5 canvas.			cty
 // 12Nov17      upgrade to ECMAScript6                                      cty
 // ============================================================================
-class CubicSpline : BaseCurvePoints() {
+class CubicSpline : ContourKnots() {
     private var arrayB: FloatArray? = null
     private var arrayC: FloatArray? = null
     private var arrayD: FloatArray? = null
@@ -37,8 +38,8 @@ class CubicSpline : BaseCurvePoints() {
     private var arrayU: FloatArray? = null
     private var arrayZ: FloatArray? = null
 
-    fun clear() {
-        knots.clear()
+    override fun clear() {
+        super.clear()
 
         arrayB = null
         arrayC = null

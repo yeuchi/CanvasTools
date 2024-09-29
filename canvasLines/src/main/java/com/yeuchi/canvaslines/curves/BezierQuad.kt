@@ -1,15 +1,12 @@
 package com.yeuchi.canvaslines.curves
 
 import android.graphics.PointF
+import com.yeuchi.canvaslines.ContourKnots
 
 /**
  *
  */
-class BezierQuad : BaseCurvePoints() {
-
-    fun clear() {
-        knots.clear()
-    }
+class BezierQuad : ContourKnots() {
 
     private fun requant(i: Int): Int {
         return when {
