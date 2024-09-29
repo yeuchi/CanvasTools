@@ -42,7 +42,7 @@ open class MainViewModel @Inject constructor() : ViewModel() {
                 /*
                  * TODO need to implement correct get() here
                  */
-                is BezierQuad -> return contour.getKnots()
+                is BezierQuad -> return (contour as BezierQuad).getPoints()
 
                 is BezierCubic -> return contour.getKnots()
 

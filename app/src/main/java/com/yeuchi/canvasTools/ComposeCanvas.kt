@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ComposeCanvas(viewModel: MainViewModel) {
     viewModel.apply {
-        val radioOptions = listOf("line", "bezier", "cubic_spline")
+        val radioOptions = listOf("line", "bezier_quad", "cubic_spline")
         val selectedOption = remember { mutableStateOf(radioOptions[0]) }
 
         Box(modifier = Modifier
@@ -97,7 +97,7 @@ fun ComposeCanvas(viewModel: MainViewModel) {
 
 private fun chooseContourType(text:String, viewModel: MainViewModel) {
     val type = when (text) {
-        "bezier" -> ContourType.BEZIER_QUAD
+        "bezier_quad" -> ContourType.BEZIER_QUAD
         "cubic_spline" -> ContourType.CUBIC_SPLINE
 //                                   "line"
         else -> ContourType.DEFAULT_LINE
