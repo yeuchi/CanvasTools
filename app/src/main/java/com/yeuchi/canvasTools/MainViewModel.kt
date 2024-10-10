@@ -7,7 +7,6 @@ import com.yeuchi.canvaslines.ContourKnots
 import com.yeuchi.canvaslines.curves.BezierCubic
 import com.yeuchi.canvaslines.curves.BezierQuad
 import com.yeuchi.canvaslines.curves.CubicSpline
-import com.yeuchi.canvaslines.lines.Line
 import com.yeuchi.canvaslines.lines.LinearRegression
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -42,9 +41,13 @@ open class MainViewModel @Inject constructor() : ViewModel() {
                 /*
                  * TODO need to implement correct get() here
                  */
-                is BezierQuad -> return (contour as BezierQuad).getPoints()
+                is BezierQuad -> {
+                    return (contour as BezierQuad).getPoints()
+                }
 
-                is BezierCubic -> return contour.getKnots()
+                is BezierCubic -> {
+                    return contour.getKnots()
+                }
 
                 is CubicSpline ->
                     (contour as CubicSpline).apply {
@@ -52,10 +55,14 @@ open class MainViewModel @Inject constructor() : ViewModel() {
                         return getPoints()
                     }
 
-                is LinearRegression -> return contour.getKnots()
+                is LinearRegression -> {
+                    return contour.getKnots()
+                }
 
 //                is Line,
-                else -> return contour.getKnots()
+                else -> {
+                    return contour.getKnots()
+                }
             }
         }
 
@@ -77,19 +84,18 @@ open class MainViewModel @Inject constructor() : ViewModel() {
             contour.apply {
                 insert(p)
             }
-
-            _event.emit(MainViewEvent.invalidated)
+            _event.emit(MainViewEvent.Invalidated)
         }
     }
 
     fun deleteAll() {
         viewModelScope.launch(Dispatchers.IO) {
             contour.clear()
-            _event.emit(MainViewEvent.invalidated)
+            _event.emit(MainViewEvent.Invalidated)
         }
     }
 }
 
 sealed class MainViewEvent() {
-    object invalidated : MainViewEvent()
+    data object Invalidated : MainViewEvent()
 }

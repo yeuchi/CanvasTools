@@ -63,7 +63,7 @@ fun ComposeCanvas(viewModel: MainViewModel) {
             }
         }
 
-        Column(Modifier.padding(5.dp, 80.dp, 0.dp, 0.dp)) {
+        Column(Modifier.padding(30.dp, 110.dp, 0.dp, 0.dp)) {
             radioOptions.forEach { text ->
                 Row(
                     Modifier

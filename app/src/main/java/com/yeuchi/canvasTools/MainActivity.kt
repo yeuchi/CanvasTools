@@ -3,41 +3,34 @@ package com.yeuchi.canvasTools
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.asLiveData
 import com.yeuchi.canvasTools.ui.theme.CanvasToolsTheme
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
     }
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch {
-            viewModel.event.collect {
+            viewModel.event.asLiveData().observeForever {
                 when (it) {
-                    is MainViewEvent.invalidated -> onInvalidated()
+                    is MainViewEvent.Invalidated -> onInvalidated()
                 }
             }
-        }
         onInvalidated()
     }
 
@@ -48,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 ComposeCanvas(viewModel)
 
                 FloatingActionButton(
-                    modifier = Modifier.padding(5.dp, 5.dp).testTag("fab_delete"),
+                    modifier = Modifier.padding(45.dp, 40.dp).testTag("fab_delete"),
                     onClick = { onClickClear() },
                 ) {
                     Icon(Icons.Filled.Delete, "Delete")
