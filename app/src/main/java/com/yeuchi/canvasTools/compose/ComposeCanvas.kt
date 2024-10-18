@@ -29,6 +29,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.yeuchi.canvasTools.ContourType
 import com.yeuchi.canvasTools.MainViewModel
+import com.yeuchi.canvaslines.ContourKnots
+import com.yeuchi.canvaslines.lines.Line
+import com.yeuchi.canvaslines.lines.LinearRegression
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -40,7 +43,8 @@ fun ComposeCanvas(viewModel: MainViewModel) {
             ContourType.Line.name,
             ContourType.BezierCubic.name,
             ContourType.BezierQuad.name,
-            ContourType.CubicSpline.name
+            ContourType.CubicSpline.name,
+            ContourType.LinearRegression.name
         )
         val selectedOption = remember { mutableStateOf(radioOptions[0]) }
 
@@ -67,6 +71,13 @@ fun ComposeCanvas(viewModel: MainViewModel) {
                 Path().let { path ->
                     when (viewModel.contourType) {
                         ContourType.BezierCubic -> drawBezierCubic(points, path, this)
+
+                        ContourType.LinearRegression -> drawLinearRegression(
+                            points,
+                            path,
+                            this,
+                            contourObject as LinearRegression
+                        )
 
 //                        ContourType.Line,
 //                        ContourType.CubicSpline,
@@ -162,9 +173,89 @@ fun drawBezierCubic(points: List<PointF>, path: Path, drawScope: DrawScope) {
                     )
                 ),
                 style = Stroke(width = 1f, cap = StrokeCap.Round)
-            )        }
-    }
-    else {
+            )
+        }
+    } else {
         drawLine(points, path, drawScope)
+    }
+}
+
+fun drawLinearRegression(
+    points: List<PointF>,
+    path: Path,
+    drawScope: DrawScope,
+    regression: LinearRegression
+) {
+    var regressionLine: Line? = null
+    val trianglePath = when (points.size) {
+
+        0, 1 -> {
+            Path().let {
+                it.moveTo(drawScope.size.width * .20f, drawScope.size.height * .77f)
+                it.lineTo(drawScope.size.width * .20f, drawScope.size.height * 0.95f)
+                it.lineTo(drawScope.size.width * .37f, drawScope.size.height * 0.86f)
+                it.close()
+                it
+            }
+        }
+
+        //1 -> {}
+
+        2 -> {
+            Path().let { path ->
+                path.moveTo(points[0].x, points[0].y)
+                path.lineTo(points[1].x, points[1].y)
+                path
+            }
+        }
+
+        else -> {
+            val (a, b) = regression.findLeastSquare(
+                points,
+                points[0].x,
+                points[points.size - 1].x
+            )
+            regressionLine = Line(a, b)
+            Path().let { path ->
+                path.moveTo(a.x, a.y)
+                path.lineTo(b.x, b.y)
+                path
+            }
+        }
+    }
+
+    val colors = listOf(Color.Green, Color(0xFF0277fe))
+    drawScope.drawPath(
+        path = trianglePath,
+        Brush.verticalGradient(colors = colors),
+        style = Stroke(width = 5f, cap = StrokeCap.Round)
+    )
+
+    /**
+     * Draw tangent lines
+     */
+
+    regressionLine?.let { line ->
+        points.forEach { p ->
+            val tangent = line.findNormalLineFrom(p)
+            val pp = line.findIntersectionFrom(tangent)
+            pp?.let {
+                Path().let { path ->
+                    path.moveTo(p.x, p.y)
+                    path.lineTo(pp.x, pp.y)
+
+                    drawScope.drawPath(
+                        path = path,
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.DarkGray,
+                                Color.DarkGray
+                            )
+                        ),
+                        style = Stroke(width = 5f, cap = StrokeCap.Round)
+                    )
+                }
+            }
+        }
     }
 }

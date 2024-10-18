@@ -29,9 +29,12 @@ open class MainViewModel @Inject constructor() : ViewModel() {
 
     private var contour: ContourKnots = ContourFactory.create(ContourType.Line)
 
-    val contourType:ContourType
+    val contourObject: ContourKnots
+        get() = contour
+
+    val contourType: ContourType
         get() {
-            return when(contour) {
+            return when (contour) {
                 is BezierQuad -> ContourType.BezierQuad
                 is BezierCubic -> ContourType.BezierCubic
                 is CubicSpline -> ContourType.CubicSpline
@@ -43,7 +46,7 @@ open class MainViewModel @Inject constructor() : ViewModel() {
     fun setContourType(type: ContourType) {
         val knots = contour.getKnots()
         contour = ContourFactory.create(type)
-        contour.setKnots(ArrayList<PointF>(knots))
+        contour.setKnots(ArrayList(knots))
     }
 
     val points: List<PointF>
@@ -107,6 +110,6 @@ open class MainViewModel @Inject constructor() : ViewModel() {
     }
 }
 
-sealed class MainViewEvent() {
+sealed class MainViewEvent {
     data object Invalidated : MainViewEvent()
 }
