@@ -27,7 +27,18 @@ open class MainViewModel @Inject constructor() : ViewModel() {
 //   val event: SharedFlow<MainViewEvent>
 //       field = MutableSharedFlow<MainViewEvent>()
 
-    private var contour: ContourKnots = ContourFactory.create(ContourType.DEFAULT_LINE)
+    private var contour: ContourKnots = ContourFactory.create(ContourType.Line)
+
+    val contourType:ContourType
+        get() {
+            return when(contour) {
+                is BezierQuad -> ContourType.BezierQuad
+                is BezierCubic -> ContourType.BezierCubic
+                is CubicSpline -> ContourType.CubicSpline
+                is LinearRegression -> ContourType.LinearRegression
+                else -> ContourType.Line
+            }
+        }
 
     fun setContourType(type: ContourType) {
         val knots = contour.getKnots()

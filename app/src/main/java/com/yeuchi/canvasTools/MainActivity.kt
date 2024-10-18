@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.asLiveData
+import com.yeuchi.canvasTools.compose.ComposeCanvas
 import com.yeuchi.canvasTools.ui.theme.CanvasToolsTheme
 
 class MainActivity : ComponentActivity() {

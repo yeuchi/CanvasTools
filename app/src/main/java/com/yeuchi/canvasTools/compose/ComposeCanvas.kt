@@ -1,4 +1,4 @@
-package com.yeuchi.canvasTools
+package com.yeuchi.canvasTools.compose
 
 import android.graphics.PointF
 import android.view.MotionEvent
@@ -27,13 +27,21 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.yeuchi.canvasTools.ContourType
+import com.yeuchi.canvasTools.MainViewModel
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ComposeCanvas(viewModel: MainViewModel) {
+
     viewModel.apply {
-        val radioOptions = listOf("line", "bezier_quad", "cubic_spline")
+        val radioOptions = listOf(
+            ContourType.Line.name,
+            ContourType.BezierCubic.name,
+            ContourType.BezierQuad.name,
+            ContourType.CubicSpline.name
+        )
         val selectedOption = remember { mutableStateOf(radioOptions[0]) }
 
         Box(modifier = Modifier
@@ -57,8 +65,13 @@ fun ComposeCanvas(viewModel: MainViewModel) {
 
             if (points.size > 1) {
                 Path().let { path ->
-                    path.moveTo(points[0].x, points[0].y)
-                    drawPath(points, path, this)
+                    when (viewModel.contourType) {
+                        ContourType.BezierCubic -> drawBezierCubic(points, path, this)
+
+//                        ContourType.Line,
+//                        ContourType.CubicSpline,
+                        else -> drawLine(points, path, this)
+                    }
                 }
             }
         }
@@ -95,17 +108,13 @@ fun ComposeCanvas(viewModel: MainViewModel) {
     }
 }
 
-private fun chooseContourType(text:String, viewModel: MainViewModel) {
-    val type = when (text) {
-        "bezier_quad" -> ContourType.BEZIER_QUAD
-        "cubic_spline" -> ContourType.CUBIC_SPLINE
-//                                   "line"
-        else -> ContourType.DEFAULT_LINE
-    }
+private fun chooseContourType(text: String, viewModel: MainViewModel) {
+    val type = ContourType.valueOf(text)
     viewModel.setContourType(type)
 }
 
-fun drawPath(points: List<PointF>, path: Path, drawScope: DrawScope) {
+fun drawLine(points: List<PointF>, path: Path, drawScope: DrawScope) {
+    path.moveTo(points[0].x, points[0].y)
     for (i in 1 until points.size) {
         path.lineTo(points[i].x, points[i].y)
         drawScope.drawPath(
@@ -118,5 +127,44 @@ fun drawPath(points: List<PointF>, path: Path, drawScope: DrawScope) {
             ),
             style = Stroke(width = 1f, cap = StrokeCap.Round)
         )
+    }
+}
+
+fun drawBezierCubic(points: List<PointF>, path: Path, drawScope: DrawScope) {
+    val size = points.size
+    if (size > 2) {
+        val conPoint1 = ArrayList<PointF>()
+        val conPoint2 = ArrayList<PointF>()
+        for (i in 1 until size) {
+            val prev = points[i - 1]
+            val p = points[i]
+            conPoint1.add(PointF((p.x + prev.x) / 2, prev.y))
+            conPoint2.add(PointF((p.x + prev.x) / 2, p.y))
+        }
+        val first = points[0]
+        first.apply {
+            path.moveTo(first.x, first.y)
+
+            for (i in 1..<size) {
+                val p = points[i]
+                path.cubicTo(
+                    conPoint1[i - 1].x, conPoint1[i - 1].y,
+                    conPoint2[i - 1].x, conPoint2[i - 1].y,
+                    p.x, p.y
+                )
+            }
+            drawScope.drawPath(
+                path,
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color.DarkGray,
+                        Color.DarkGray
+                    )
+                ),
+                style = Stroke(width = 1f, cap = StrokeCap.Round)
+            )        }
+    }
+    else {
+        drawLine(points, path, drawScope)
     }
 }

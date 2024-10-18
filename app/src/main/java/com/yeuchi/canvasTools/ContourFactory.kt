@@ -11,19 +11,19 @@ object ContourFactory {
     fun create(pointsType: ContourType): ContourKnots {
 
         return when (pointsType) {
-            ContourType.BEZIER_CUBIC -> BezierCubic()
-            ContourType.BEZIER_QUAD -> BezierQuad()
-            ContourType.CUBIC_SPLINE -> CubicSpline()
-            ContourType.LINEAR_REGRESSION -> LinearRegression()
+            ContourType.BezierCubic -> BezierCubic()
+            ContourType.BezierQuad -> BezierQuad()
+            ContourType.CubicSpline -> CubicSpline()
+            ContourType.LinearRegression -> LinearRegression()
             else -> ContourKnots()
         }
     }
 }
 
 enum class ContourType {
-    BEZIER_CUBIC,
-    BEZIER_QUAD,
-    CUBIC_SPLINE,
-    LINEAR_REGRESSION,
-    DEFAULT_LINE
+    Line,
+    BezierCubic,
+    BezierQuad,
+    CubicSpline,
+    LinearRegression
 }
