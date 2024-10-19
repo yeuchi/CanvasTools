@@ -1,5 +1,6 @@
 # CanvasTools
-consolidation of a few useful repositories
+Consolidation of a few useful repositories.
+Exercise for Android SDK, Maven Central repository via Sonatype.
 
 Kotlin Curves
 https://github.com/yeuchi/KotlinCurve
